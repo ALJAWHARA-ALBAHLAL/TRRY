@@ -51,7 +51,7 @@ namespace Bookstore.Models.Repositories
             return customers;
         }
 
-        public void Update(Customer newCustomer, int id)
+        public void Update( int id, Customer newCustomer)
         {
             var customer = customers.SingleOrDefault(x => x.Id == id);
             customer.FullName = newCustomer.FullName;

@@ -7,14 +7,12 @@ namespace TRRY.Controllers
 {
     public class CustomerController : Controller
     {
-      
         private readonly IShopRepositpry<Customer> customerRepository;
 
         public CustomerController(IShopRepositpry<Customer> customerRepository)
         { //Dependncy injection  // handel with interface and change  in startup if we need to change to other Repository
             this.customerRepository = customerRepository;
         }
-
 
         // GET: CustomerController
         public ActionResult Index()
@@ -69,7 +67,7 @@ namespace TRRY.Controllers
         {
             try
             {
-                customerRepository.Update(customer, id);
+                customerRepository.Update(id, customer);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -90,7 +88,7 @@ namespace TRRY.Controllers
         // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Customer customer)
         {
             try
             {

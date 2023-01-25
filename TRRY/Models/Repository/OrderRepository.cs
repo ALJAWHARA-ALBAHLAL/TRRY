@@ -18,12 +18,18 @@ namespace Bookstore.Models.Repositories
                  new ()
                  {
                      Id= 1,
-                     status="completed"
+                     status="completed",
+                     Customer = new Customer{
+                         Id = 1,
+                         FullName ="Aljawhara" }
                  },
                   new Order()
                  {
                      Id= 2,
-                     status="pending"
+                     status="pending",
+                     Customer = new Customer{
+                         Id = 2,
+                         FullName ="Lujain" }
                  }
              };
         }
@@ -50,7 +56,7 @@ namespace Bookstore.Models.Repositories
             return orders;
         }
 
-        public void Update(Order newOrder, int id)
+        public void Update( int id, Order newOrder)
         {
             var order= orders.SingleOrDefault(x => x.Id == id);
             order.status = newOrder.status;
