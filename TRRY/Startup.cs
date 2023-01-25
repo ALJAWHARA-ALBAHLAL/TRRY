@@ -55,7 +55,7 @@ namespace TRRY
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute(  //we can add as rahaf say 
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });

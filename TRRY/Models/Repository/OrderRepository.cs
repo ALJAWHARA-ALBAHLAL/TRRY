@@ -9,7 +9,7 @@ namespace Bookstore.Models.Repositories
 {
     public class OrderRepository : IShopRepositpry<Order>
     {
-        List<Order> orders; // As context database
+        List<Order> orders; // As context database   //We can replace it with EF
 
         public OrderRepository()
         {

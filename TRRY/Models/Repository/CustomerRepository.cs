@@ -9,7 +9,7 @@ namespace Bookstore.Models.Repositories
 {
     public class CustomerRepository : IShopRepositpry<Customer>
     {
-        List<Customer> customers; // As context database
+        List<Customer> customers; // As context database       
 
         public CustomerRepository()
         {

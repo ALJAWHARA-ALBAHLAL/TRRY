@@ -39,7 +39,7 @@ namespace TRRY.Controllers
         public ActionResult Create()
         {
             var model = new OrderCustomerViewModel {
-                Customers = customerRepository.List().ToList()
+                Customers = FillSelectList()
             };
 
             return View(model);
@@ -52,6 +52,17 @@ namespace TRRY.Controllers
         {
             try
             {
+                if (model.CustomerId == -1)
+                {//here we will make the message to take value
+                    ViewBag.Message = " Please select a customer from the list!"; //Dynamic prop ViewBage allow us to send data from controlller and view
+                    var vmodel = new OrderCustomerViewModel
+                    {
+                        Customers = FillSelectList()
+                    };
+                    return View(vmodel);
+                }
+
+
                 Order order = new Order {
 
                     Id = model.OrderId,
@@ -87,11 +98,17 @@ namespace TRRY.Controllers
         // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Order order) //ppost after save edit form 
+        public ActionResult Edit(OrderCustomerViewModel model) //ppost after save edit form 
         {
             try
             {
-                orderRepository.Update(id, order);
+                Order order = new Order
+                {
+                    status = model.status,
+                    Customer = customerRepository.Find(model.CustomerId),
+                };
+
+                orderRepository.Update(model.OrderId,order);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -112,7 +129,7 @@ namespace TRRY.Controllers
         // POST: OrderController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Order order)
+        public ActionResult ConfirmDelete(int id, Order order)
         {
             try
             {
@@ -125,5 +142,15 @@ namespace TRRY.Controllers
                 return View();
             }
         }
+
+
+        List<Customer> FillSelectList() { //List of Customer, and then we can validate inertion of customer
+            var customers = customerRepository.List().ToList();
+            customers.Insert(0, new Customer { Id = -1, FullName = "Please select a customer" });
+            return customers;
+        }
+        
+         
+        
     }
 }
