@@ -13,6 +13,6 @@ namespace TRRY.Models.Repositories
         void Add(TEntinty entinty);
         void Delete(int id);
         void Update(TEntinty entinty, int id);
-
+        void Update(int id, Customer customer);
     }
 }

@@ -26,23 +26,27 @@ namespace TRRY.Controllers
         // GET: CustomerController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var customers = customerRepository.Find(id);
+            return View(customers);
         }
 
         // GET: CustomerController/Create
-        public ActionResult Create()
+        public ActionResult Create()//form
         {
+
             return View();
         }
 
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Customer customer)//submit
         {
-            try
+            try   
             {
-                return RedirectToAction(nameof(Index));
+                customerRepository.Add(customer);
+
+                return RedirectToAction(nameof(Index));  
             }
             catch
             {
@@ -53,16 +57,20 @@ namespace TRRY.Controllers
         // GET: CustomerController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var customers = customerRepository.Find(id);
+
+            return View(customers);
         }
 
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Customer customer, int id)
         {
             try
             {
+                customerRepository.Update(customer, id);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -74,7 +82,9 @@ namespace TRRY.Controllers
         // GET: CustomerController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var customer = customerRepository.Find(id); 
+
+            return View(customer);
         }
 
         // POST: CustomerController/Delete/5
@@ -84,12 +94,14 @@ namespace TRRY.Controllers
         {
             try
             {
+
+                customerRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
-        }
+        } 
     }
 }

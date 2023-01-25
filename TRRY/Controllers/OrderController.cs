@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TRRY.Models.Repositories;
+using TRRY.Models;
+using Bookstore.Models.Repositories;
 
 namespace TRRY.Controllers
 {
     public class OrderController : Controller
     {
+        private readonly IShopRepositpry<Order> orderRepository;
+
+        public OrderController(IShopRepositpry<Order> orderRepository) 
+        {
+            this.orderRepository = orderRepository;
+        }    
         // GET: OrderController
         public ActionResult Index()
         {
