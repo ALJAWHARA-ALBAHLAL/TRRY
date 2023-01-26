@@ -36,6 +36,7 @@ namespace Bookstore.Models.Repositories
 
         public void Add(Order entinty)
         {
+            entinty.Id=orders.Max(o => o.Id)+1;                       
             orders.Add(entinty);
         }
 

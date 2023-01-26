@@ -6,6 +6,7 @@ using Bookstore.Models.Repositories;
 using TRRY.ViewModels;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace TRRY.Controllers
 {
@@ -18,7 +19,7 @@ namespace TRRY.Controllers
         {
             this.orderRepository = orderRepository;
             this.customerRepository = customerRepository;
-        }    
+        }
 
         // GET: OrderController
         public ActionResult Index()
@@ -38,47 +39,60 @@ namespace TRRY.Controllers
         // GET: OrderController/Create
         public ActionResult Create()
         {
-            var model = new OrderCustomerViewModel {
+            var model = new OrderCustomerViewModel
+            {
                 Customers = FillSelectList()
             };
 
             return View(model);
         } //Form and create model that display customers info
 
+
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(OrderCustomerViewModel model)
         {
-            try
+            if (ModelState.IsValid) //validate input frmo user
             {
-                if (model.CustomerId == -1)
-                {//here we will make the message to take value
-                    ViewBag.Message = " Please select a customer from the list!"; //Dynamic prop ViewBage allow us to send data from controlller and view
-                    var vmodel = new OrderCustomerViewModel
-                    {
-                        Customers = FillSelectList()
+                try
+                {
+                    if (model.CustomerId == -1)
+                    {//here we will make the message to take value
+                        ViewBag.Message = " Please select a customer from the list!"; //Dynamic prop ViewBage allow us to send data from controlller and view
+                        //var vmodel = new OrderCustomerViewModel
+                        //{
+                        //    Customers = FillSelectList()
+                        //};
+                        return View(GetAllCustomer());
                     };
-                    return View(vmodel);
+
+
+                    Order order = new Order
+                    {
+
+                        Id = model.OrderId,
+                        status = model.status,
+                        Customer = customerRepository.Find(model.CustomerId),
+                    };
+
+                    orderRepository.Add(order);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
                 }
 
-
-                Order order = new Order {
-
-                    Id = model.OrderId,
-                    status = model.status,
-                    Customer = customerRepository.Find(model.CustomerId),
-                };
-
-                orderRepository.Add(order);
-
-                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
-        } //after submit
+            //var vvmodel = new OrderCustomerViewModel
+            //{
+            //    Customers = FillSelectList()
+            //};
+            ModelState.AddModelError("", "You have to fill all the required field");
+            return View(GetAllCustomer());
+        }
 
         // GET: OrderController/Edit/5
         public ActionResult Edit(int id)
@@ -143,14 +157,18 @@ namespace TRRY.Controllers
             }
         }
 
-
         List<Customer> FillSelectList() { //List of Customer, and then we can validate inertion of customer
             var customers = customerRepository.List().ToList();
             customers.Insert(0, new Customer { Id = -1, FullName = "Please select a customer" });
             return customers;
         }
         
-         
-        
+         OrderCustomerViewModel GetAllCustomer() {
+            var vmodel = new OrderCustomerViewModel
+            {
+                Customers = FillSelectList(),
+            };
+            return vmodel;
+        }
     }
 }

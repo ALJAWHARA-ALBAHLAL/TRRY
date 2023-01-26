@@ -30,6 +30,7 @@ namespace Bookstore.Models.Repositories
 
         public void Add(Customer entinty)
         {
+            entinty.Id = customers.Max(o => o.Id) + 1;
             customers.Add(entinty);
         }
 
@@ -59,3 +60,5 @@ namespace Bookstore.Models.Repositories
     }
     }
 
+//EF 
+//mageration 2 commands

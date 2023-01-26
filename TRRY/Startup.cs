@@ -29,8 +29,15 @@ namespace TRRY
             services.AddControllersWithViews();
             services.AddMvc();
             //Dependncies
-            services.AddSingleton<IShopRepositpry<Customer>, CustomerRepository>(); //Concret type and interface
-            services.AddSingleton<IShopRepositpry<Order>, OrderRepository>(); //Concret type and int
+            //services.AddSingleton<IShopRepositpry<Customer>, CustomerRepository>(); //Concret type and interface
+            //services.AddSingleton<IShopRepositpry<Order>, OrderRepository>(); //Concret type and int
+
+            services.AddScoped<IShopRepositpry<Customer>, CustomerRepository>(); //Concret type and interface
+            services.AddScoped<IShopRepositpry<Order>, OrderRepository>(); //Concret type and int
+                                                                              // Add services to the container.
+            services.AddDbContext<ApplicationDbContext>(option =>
+            option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionDb"))); //Connect
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
